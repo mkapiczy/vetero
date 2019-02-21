@@ -8,3 +8,5 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount("#app");
+
+import "fomantic-ui-less/semantic.less";
