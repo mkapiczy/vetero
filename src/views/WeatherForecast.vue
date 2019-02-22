@@ -21,13 +21,12 @@
 }
 </style>
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import CurrentWeather from "@/components/CurrentWeather.vue"; // @ is an alias to /src
 import HourlyWeather from "@/components/HourlyWeather.vue"; // @ is an alias to /src
 import DayMenu from "@/components/DayMenu.vue"; // @ is an alias to /src
 import WeatherService from "../services/WeatherService";
 import { SingleDayForecast, Weather } from "../services/WeatherService";
-import _ from "lodash";
 
 @Component({
   components: {
@@ -37,9 +36,9 @@ import _ from "lodash";
   }
 })
 export default class WeatherForecast extends Vue {
-  currentWeather: null | Weather = null;
-  forecastsByDay: void | Array<SingleDayForecast> = [];
-  forecastForSelectedDay: null | SingleDayForecast = null;
+  currentWeather: Weather = {};
+  forecastsByDay: Array<SingleDayForecast> = [];
+  forecastForSelectedDay: SingleDayForecast = {};
   isLoading: boolean = true;
   forecastRetrivalTime: null | Date = null;
 

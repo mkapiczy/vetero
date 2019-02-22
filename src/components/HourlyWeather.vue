@@ -40,7 +40,7 @@
 <style scoped lang="scss">
 #hourly {
   flex: none;
-  min-height: 30%;
+  min-height: 35%;
 }
 </style>
 
@@ -50,7 +50,7 @@ import { SingleDayForecast } from "@/services/WeatherService";
 
 @Component
 export default class HourlyWeather extends Vue {
-  @Prop() private weather: null | SingleDayForecast = null;
+  @Prop() private weather: SingleDayForecast;
   @Prop() private isLoading: boolean;
 }
 </script>

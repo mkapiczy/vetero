@@ -33,7 +33,7 @@
 <style scoped lang="scss">
 #dayMenu {
   flex: none;
-  min-height: 15%;
+  min-height: 20%;
 }
 </style>
 
