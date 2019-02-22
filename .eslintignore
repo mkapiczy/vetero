@@ -1,0 +1,5 @@
+semantic-ui
+public/
+node_modules/
+dist/
+*.config.*
