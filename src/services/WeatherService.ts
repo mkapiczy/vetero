@@ -7,44 +7,44 @@ const API_URL = process.env.VUE_APP_API_URL;
 const API_KEY = process.env.VUE_APP_API_KEY;
 
 export class Weather {
-  date: string;
-  time: string;
-  temp: number;
-  tempMin: number;
-  tempMax: number;
-  pressure: number;
-  humidity: number;
-  weatherType: string;
-  weatherDescription: string;
-  icon: string;
-  clouds: number;
-  wind: Wind;
-  rain: number;
-  snow: number;
+  date?: string;
+  time?: string;
+  temp?: number;
+  tempMin?: number;
+  tempMax?: number;
+  pressure?: number;
+  humidity?: number;
+  weatherType?: string;
+  weatherDescription?: string;
+  icon?: string;
+  clouds?: number;
+  wind?: Wind;
+  rain?: number;
+  snow?: number;
 }
 
 export class Wind {
-  direction: number;
-  speed: number;
+  direction?: number;
+  speed?: number;
 }
 
 export class AverageWeather {
-  tempMin: number;
-  tempMax: number;
-  tempAvg: number;
-  humidity: number;
+  tempMin?: number;
+  tempMax?: number;
+  tempAvg?: number;
+  humidity?: number;
 }
 
 export class SingleDayForecast {
-  date: string;
-  averageWeather: AverageWeather;
-  forecast: Array<Weather>;
+  date?: string;
+  averageWeather?: AverageWeather;
+  forecast?: Array<Weather>;
 }
 
 export class Forecast {
-  ts: Date;
-  currentWeather: Weather;
-  forecastByDay: Array<SingleDayForecast>;
+  ts?: Date;
+  currentWeather?: Weather;
+  forecastByDay?: Array<SingleDayForecast>;
 }
 
 const getWeatherForecast = (cityId: string): Promise<Forecast> => {
@@ -115,15 +115,17 @@ const getAverageWeatherForDay = (
   dailyForecast: Array<Weather>
 ): AverageWeather => {
   return {
-    tempMin: math.min(dailyForecast.map((f: Weather) => f.tempMin)),
-    tempMax: math.max(dailyForecast.map((f: Weather) => f.tempMax)),
-    tempAvg: math.mean(dailyForecast.map((f: Weather) => f.temp)),
-    humidity: math.mean(dailyForecast.map((f: Weather) => f.humidity))
+    tempMin: math.min(dailyForecast.map((f: Weather) => f.tempMin || 0)),
+    tempMax: math.max(dailyForecast.map((f: Weather) => f.tempMax || 0)),
+    tempAvg: math.mean(dailyForecast.map((f: Weather) => f.temp || 0)),
+    humidity: math.mean(dailyForecast.map((f: Weather) => f.humidity || 0))
   };
 };
 
 const getCurrentWeather = (currentDayForecast: SingleDayForecast): Weather => {
-  return currentDayForecast.forecast[0];
+  return currentDayForecast && currentDayForecast.forecast
+    ? currentDayForecast.forecast[0]
+    : {};
 };
 export default {
   SingleDayForecast,
