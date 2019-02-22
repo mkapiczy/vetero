@@ -1,11 +1,12 @@
 import http from "axios";
 import _ from "lodash";
 import moment from "moment";
+import * as math from "mathjs";
 
 const API_URL = process.env.VUE_APP_API_URL;
 const API_KEY = process.env.VUE_APP_API_KEY;
 
-export class WeatherForecast {
+export class Weather {
   date: string;
   time: string;
   temp: number;
@@ -17,21 +18,36 @@ export class WeatherForecast {
   weatherDescription: string;
   icon: string;
   clouds: number;
-  windSpeed: number;
-  windDirection: number;
+  wind: Wind;
   rain: number;
   snow: number;
 }
 
-export class SingleDayForecast {
-  date: string;
-  mainWeather: WeatherForecast;
-  forecast: Array<WeatherForecast>;
+export class Wind {
+  direction: number;
+  speed: number;
 }
 
-const getWeather = (
-  cityId: string
-): Promise<void | Array<SingleDayForecast>> => {
+export class AverageWeather {
+  tempMin: number;
+  tempMax: number;
+  tempAvg: number;
+  humidity: number;
+}
+
+export class SingleDayForecast {
+  date: string;
+  averageWeather: AverageWeather;
+  forecast: Array<Weather>;
+}
+
+export class Forecast {
+  ts: Date;
+  currentWeather: Weather;
+  forecastByDay: Array<SingleDayForecast>;
+}
+
+const getWeatherForecast = (cityId: string): Promise<Forecast> => {
   cityId = "7531926";
   const requestUrl =
     API_URL + "?id=" + cityId + "&units=metric" + "&APPID=" + API_KEY;
@@ -46,14 +62,18 @@ const getWeather = (
     });
 };
 
-const mapResponseToForecast = (data: any): Array<SingleDayForecast> => {
-  let forecasts: Array<WeatherForecast> = _.map(data.list || [], w =>
-    mapToWeatherForecastClass(w)
+const mapResponseToForecast = (data: any): Forecast => {
+  let weatherList: Array<Weather> = _.map(data.list || [], w =>
+    mapToWeatherClass(w)
   );
-  return groupForecastsByDay(forecasts);
+  let forecast = new Forecast();
+  forecast.ts = new Date();
+  forecast.forecastByDay = groupForecastsByDay(weatherList);
+  forecast.currentWeather = getCurrentWeather(forecast.forecastByDay[0]);
+  return forecast;
 };
 
-const mapToWeatherForecastClass = (w: any): WeatherForecast => {
+const mapToWeatherClass = (w: any): Weather => {
   let dateAndTime = w.dt_txt.split(" ");
   return {
     date: dateAndTime[0],
@@ -67,28 +87,46 @@ const mapToWeatherForecastClass = (w: any): WeatherForecast => {
     weatherDescription: w.weather[0].description,
     icon: "http://openweathermap.org/img/w/" + w.weather[0].icon + ".png",
     clouds: w.clouds.all,
-    windSpeed: w.wind.speed,
-    windDirection: w.wind.deg,
+    wind: {
+      direction: w.wind.deg,
+      speed: w.wind.speed
+    },
     rain: w.rain ? w.rain["3h"] : null,
     snow: w.snow ? w.snow["3h"] : null
   };
 };
 
 const groupForecastsByDay = (
-  forecasts: Array<WeatherForecast>
+  forecasts: Array<Weather>
 ): Array<SingleDayForecast> => {
   let forecastsByDay = _.groupBy(forecasts, result =>
     moment(result.date, "YYYY-MM-DD").startOf("day")
   );
-  return _.map(forecastsByDay, g => {
+  return _.map(forecastsByDay, f => {
     let singleDayForecast = new SingleDayForecast();
-    singleDayForecast.date = g[0].date;
-    singleDayForecast.mainWeather = g[0];
-    singleDayForecast.forecast = g;
+    singleDayForecast.date = f[0].date;
+    singleDayForecast.forecast = f;
+    singleDayForecast.averageWeather = getAverageWeatherForDay(f);
     return singleDayForecast;
   });
 };
+
+const getAverageWeatherForDay = (
+  dailyForecast: Array<Weather>
+): AverageWeather => {
+  return {
+    tempMin: math.min(dailyForecast.map((f: Weather) => f.tempMin)),
+    tempMax: math.max(dailyForecast.map((f: Weather) => f.tempMax)),
+    tempAvg: math.mean(dailyForecast.map((f: Weather) => f.temp)),
+    humidity: math.mean(dailyForecast.map((f: Weather) => f.humidity))
+  };
+};
+
+const getCurrentWeather = (currentDayForecast: SingleDayForecast): Weather => {
+  return currentDayForecast.forecast[0];
+};
 export default {
   SingleDayForecast,
-  getWeather
+  Forecast,
+  getWeatherForecast
 };

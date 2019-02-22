@@ -39,7 +39,7 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
-export default class MainWeather extends Vue {
+export default class CurrentWeather extends Vue {
   @Prop() private isLoading!: boolean;
 }
 </script>

@@ -2,12 +2,12 @@
   <div id="dayMenu" class="ui top attached tabular stackable menu">
     <a
       class="item"
-      v-for="singleDayWeather in weatherForecastsByDay"
+      v-for="singleDayWeather in forecastsByDay"
       :key="singleDayWeather.date"
       @click="onDayChosen(singleDayWeather)"
       :class="{
-        active: selectedDayForecast
-          ? selectedDayForecast.date === singleDayWeather.date
+        active: forecastForSelectedDay
+          ? forecastForSelectedDay.date === singleDayWeather.date
           : false
       }"
     >
@@ -17,13 +17,13 @@
         </div>
         <div class="row">
           <i class="tint icon"></i>
-          {{ singleDayWeather.mainWeather.humidity }}%
+          {{ singleDayWeather.averageWeather.humidity }}%
         </div>
         <div class="row">
-          {{ singleDayWeather.mainWeather.tempMax }}
+          {{ singleDayWeather.averageWeather.tempMax }}
         </div>
         <div class="row">
-          {{ singleDayWeather.mainWeather.tempMin }}
+          {{ singleDayWeather.averageWeather.tempMin }}
         </div>
       </div>
     </a>
@@ -33,6 +33,7 @@
 <style scoped lang="scss">
 #dayMenu {
   flex: none;
+  min-height: 15%;
 }
 </style>
 
@@ -41,8 +42,8 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import { SingleDayForecast } from "../services/WeatherService";
 @Component
 export default class DayMenu extends Vue {
-  @Prop() private selectedDayForecast!: SingleDayForecast;
-  @Prop() private weatherForecastsByDay!: Array<SingleDayForecast>;
+  @Prop() private forecastForSelectedDay!: SingleDayForecast;
+  @Prop() private forecastsByDay!: Array<SingleDayForecast>;
 
   onDayChosen(selectedDayForecast: SingleDayForecast) {
     this.$emit("onDayChosen", selectedDayForecast);

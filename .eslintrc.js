@@ -10,7 +10,7 @@ module.exports = {
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
     semi: [0, 'always'],
-    'max-len': ["warning", { "code": 100, "ignoreComments": true }]
+    'max-len': ["warn", { "code": 100, "ignoreComments": true }]
   },
   parserOptions: {
     parser: "@typescript-eslint/parser"

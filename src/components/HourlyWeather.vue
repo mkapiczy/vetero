@@ -1,9 +1,13 @@
 <template>
-  <div id="hourly" class="ui bottom attached segment">
+  <div
+    id="hourly"
+    class="ui bottom attached segment"
+    :class="{ loading: isLoading }"
+  >
     <div class="ui stackable eight column grid">
       <div
         class="column"
-        v-for="forecast in weather.forecast"
+        v-for="forecast in weather ? weather.forecast : []"
         :key="forecast.time"
       >
         <div class="ui fluid card">
@@ -36,6 +40,7 @@
 <style scoped lang="scss">
 #hourly {
   flex: none;
+  min-height: 30%;
 }
 </style>
 
@@ -45,6 +50,7 @@ import { SingleDayForecast } from "@/services/WeatherService";
 
 @Component
 export default class HourlyWeather extends Vue {
-  @Prop() private weather!: SingleDayForecast;
+  @Prop() private weather: null | SingleDayForecast = null;
+  @Prop() private isLoading: boolean;
 }
 </script>

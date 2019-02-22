@@ -1,13 +1,13 @@
 <template>
   <div id="main" class="ui flex container">
     <!-- TODO Search menu-->
-    <MainWeather :weather="selectedDayForecast" :isLoading="isLoading" />
+    <CurrentWeather :weather="currentWeather" :isLoading="isLoading" />
     <DayMenu
-      :weatherForecastsByDay="weatherForecastsByDay"
-      :selectedDayForecast="selectedDayForecast"
+      :forecastsByDay="forecastsByDay"
+      :forecastForSelectedDay="forecastForSelectedDay"
       @onDayChosen="chooseDay"
     />
-    <HourlyWeather :weather="selectedDayForecast" />
+    <HourlyWeather :weather="forecastForSelectedDay" :isLoading="isLoading" />
   </div>
 </template>
 <style scoped lang="scss">
@@ -22,39 +22,38 @@
 </style>
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import MainWeather from "@/components/MainWeather.vue"; // @ is an alias to /src
+import CurrentWeather from "@/components/CurrentWeather.vue"; // @ is an alias to /src
 import HourlyWeather from "@/components/HourlyWeather.vue"; // @ is an alias to /src
 import DayMenu from "@/components/DayMenu.vue"; // @ is an alias to /src
 import WeatherService from "../services/WeatherService";
-import { SingleDayForecast } from "../services/WeatherService";
+import { SingleDayForecast, Weather } from "../services/WeatherService";
 import _ from "lodash";
 
 @Component({
   components: {
-    MainWeather,
+    CurrentWeather,
     HourlyWeather,
     DayMenu
   }
 })
 export default class WeatherForecast extends Vue {
-  weatherForecastsByDay: void | Array<SingleDayForecast> = [];
-  selectedDayForecast: null | SingleDayForecast = null;
+  currentWeather: null | Weather = null;
+  forecastsByDay: void | Array<SingleDayForecast> = [];
+  forecastForSelectedDay: null | SingleDayForecast = null;
   isLoading: boolean = true;
+  forecastRetrivalTime: null | Date = null;
 
-  chooseDay(dayWeather: SingleDayForecast) {
-    this.selectedDayForecast = dayWeather;
+  chooseDay(selectedDayForecast: SingleDayForecast) {
+    this.forecastForSelectedDay = selectedDayForecast;
   }
   created() {
-    return WeatherService.getWeather("").then(resWeather => {
+    return WeatherService.getWeatherForecast("").then(forecast => {
+      this.forecastsByDay = forecast.forecastByDay;
+      this.currentWeather = forecast.currentWeather;
+      this.forecastRetrivalTime = forecast.ts;
+      this.forecastForSelectedDay = this.forecastsByDay[0];
       this.isLoading = false;
-      this.weatherForecastsByDay = resWeather;
     });
-  }
-  @Watch("weatherForecastsByDay")
-  onChanged(value: Array<SingleDayForecast>) {
-    if (!_.isEmpty(value)) {
-      this.selectedDayForecast = value[0];
-    }
   }
 }
 </script>
