@@ -1,8 +1,19 @@
 import http from "axios";
+import _ from "lodash";
 
-const getCities = (): Promise<any> => {
+export class City {
+  id?: number;
+  name?: string;
+  country?: string;
+}
+const getCities = (): Promise<ReadonlyArray<City>> => {
   return http.get("./city.list.json").then(resp => {
-    return resp.data.slice(0, 5000);
+    return Object.freeze(
+      _.map(_.filter(resp.data, c => !_.isEmpty(c.name)), c => {
+        delete c.coord;
+        return c;
+      })
+    );
   });
 };
 export default {

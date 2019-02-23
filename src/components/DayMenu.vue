@@ -1,18 +1,20 @@
 <template>
-  <div id="dayMenu" class="ui top attached stackable tabular menu">
+  <div
+    id="dayMenu"
+    class="ui top attached stackable tabular loading menu"
+    :class="{ disabled: disabled }"
+  >
     <a
       class="item"
       v-for="singleDayWeather in forecastsByDay"
       :key="singleDayWeather.date"
       @click="onDayChosen(singleDayWeather)"
       :class="{
-        active: forecastForSelectedDay
-          ? forecastForSelectedDay.date === singleDayWeather.date
-          : false
+        active: forecastForSelectedDay.date === singleDayWeather.date
       }"
     >
       <div class="one column stackable grid">
-        <div class="row">
+        <div class="row" style="margin-bottom: 10px;">
           {{ singleDayWeather.date }}
         </div>
         <div class="row">
@@ -44,9 +46,10 @@ import { SingleDayForecast } from "../services/WeatherService";
 export default class DayMenu extends Vue {
   @Prop() private forecastForSelectedDay!: SingleDayForecast;
   @Prop() private forecastsByDay!: Array<SingleDayForecast>;
+  @Prop() private disabled!: boolean;
 
   onDayChosen(selectedDayForecast: SingleDayForecast) {
-    this.$emit("onDayChosen", selectedDayForecast);
+    this.$emit("daySelected", selectedDayForecast);
   }
 }
 </script>

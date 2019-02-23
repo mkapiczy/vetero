@@ -3,7 +3,7 @@
     <div id="weatherCard" class="ui grid stackable">
       <div class="row">
         <div class="sixteen wide middle aligned column">
-          <h1>Currently in Warsaw</h1>
+          <h1>Currently in {{ currentCity }}</h1>
           {{ weather.date }}
         </div>
       </div>
@@ -26,7 +26,7 @@
           <div class="ui four equal width column stackable grid">
             <div class="middle aligned column">
               <div class="row">
-                Max temperature: {{ weather.tempMax || "n/a" }}
+                {{ $t("MAX_TEMPERATURE") }} {{ weather.tempMax || "n/a" }}
               </div>
               <div class="row">
                 Min temperature: {{ weather.tempMin || "n/a" }}
@@ -75,7 +75,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /*background-color: midnightblue;*/
 }
 
 .fullheight {
@@ -87,31 +86,15 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { Weather } from "../services/WeatherService";
+import WeatherService from "../services/WeatherService";
 @Component
 export default class CurrentWeather extends Vue {
   @Prop() private isLoading!: boolean;
   @Prop() private weather: Weather;
+  @Prop() private currentCity: string;
 
-  getWindDirection(degrees: number) {
-    if (degrees === 0 || degrees === 360) {
-      return "N";
-    } else if (degrees > 0 && degrees < 90) {
-      return "NE";
-    } else if (degrees === 90) {
-      return "E";
-    } else if (degrees > 90 && degrees < 180) {
-      return "SE";
-    } else if (degrees === 180) {
-      return "S";
-    } else if (degrees > 180 && degrees < 270) {
-      return "SW";
-    } else if (degrees === 270) {
-      return "W";
-    } else if (degrees > 270 && degrees < 360) {
-      return "NW";
-    } else {
-      return "n/a";
-    }
+  getWindDirection(degrees: number): string {
+    return WeatherService.getWindDirection(degrees);
   }
 }
 </script>

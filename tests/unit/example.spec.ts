@@ -1,12 +1,12 @@
 import { shallowMount } from "@vue/test-utils";
-import HelloWorld from "@/components/HelloWorld.vue";
+import CurrentWeather from "@/components/CurrentWeather.vue";
 
-describe("HelloWorld.vue", () => {
+describe("CurrentWeather.vue", () => {
   it("renders props.msg when passed", () => {
     const msg = "new message";
-    const wrapper = shallowMount(HelloWorld, {
-      propsData: { msg }
+    const wrapper = shallowMount(CurrentWeather, {
+      propsData: { isLoading: false, weather: {} }
     });
-    expect(wrapper.text()).toMatch(msg);
+    expect(wrapper.html()).toContain("Currently");
   });
 });
