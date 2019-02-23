@@ -1,8 +1,8 @@
 <template>
   <div
     id="dayMenu"
-    class="ui top attached stackable tabular loading menu"
-    :class="{ disabled: disabled }"
+    class="ui top attached tabular menu segment"
+    :class="{ disabled: disabled, loading: disabled }"
   >
     <a
       class="item"
@@ -33,7 +33,7 @@
                 })
               }}
             </div>
-            <div class="row">
+            <div class="row" style="padding-bottom: 1em;">
               <i class="tint icon"></i>
               {{
                 $t("HUMIDITY_PERC", {
@@ -51,11 +51,14 @@
 <style scoped lang="scss">
 #dayMenu {
   flex: none;
-  min-height: 20%;
+  min-height: 30%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0;
 }
 
 #dateHeader {
-  margin-bottom: 2em;
+  padding-bottom: 2em;
 }
 
 .horizontalMiddleAlign {
