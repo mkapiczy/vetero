@@ -72,7 +72,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { SingleDayForecast } from "@/services/WeatherService";
-import DailySummary from "./DailySummary";
+import DailySummary from "@/components/DailySummary.vue";
+
 @Component({
   components: {
     DailySummary
