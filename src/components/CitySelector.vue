@@ -8,7 +8,7 @@
         class="search"
         type="text"
         autocomplete="off"
-        placeholder="Select City"
+        :placeholder="$t('SELECT_CITY')"
         v-model.trim="citySearchTerm"
       />
 

@@ -13,19 +13,35 @@
         active: forecastForSelectedDay.date === singleDayWeather.date
       }"
     >
-      <div class="one column stackable grid">
-        <div class="row" style="margin-bottom: 10px;">
-          {{ singleDayWeather.date }}
-        </div>
-        <div class="row">
-          <i class="tint icon"></i>
-          {{ singleDayWeather.averageWeather.humidity }}%
-        </div>
-        <div class="row">
-          {{ singleDayWeather.averageWeather.tempMax }}
-        </div>
-        <div class="row">
-          {{ singleDayWeather.averageWeather.tempMin }}
+      <div class="content">
+        <div id="dateHeader" class="header">{{ singleDayWeather.date }}</div>
+        <div class="description">
+          <div class="ui equal width stackable horizontalMiddleAlign grid">
+            <div class="row">
+              <i class="thermometer full icon"></i>
+              {{
+                $t("CELCIUS_TEMPERATURE", {
+                  temp: singleDayWeather.averageWeather.tempMax
+                })
+              }}
+            </div>
+            <div class="row">
+              <i class="thermometer empty icon"></i>
+              {{
+                $t("CELCIUS_TEMPERATURE", {
+                  temp: singleDayWeather.averageWeather.tempMin
+                })
+              }}
+            </div>
+            <div class="row">
+              <i class="tint icon"></i>
+              {{
+                $t("HUMIDITY_PERC", {
+                  humidity: singleDayWeather.averageWeather.humidity
+                })
+              }}
+            </div>
+          </div>
         </div>
       </div>
     </a>
@@ -36,6 +52,17 @@
 #dayMenu {
   flex: none;
   min-height: 20%;
+}
+
+#dateHeader {
+  margin-bottom: 2em;
+}
+
+.horizontalMiddleAlign {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 </style>
 

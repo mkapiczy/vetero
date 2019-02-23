@@ -3,8 +3,10 @@
     <div id="weatherCard" class="ui grid stackable">
       <div class="row">
         <div class="sixteen wide middle aligned column">
-          <h1>Currently in {{ currentCity }}</h1>
           {{ weather.date }}
+          <h1>{{ $t("WEATHER_IN", { city: currentCity }) }}</h1>
+          {{ weather.weatherType }} -
+          {{ weather.weatherDescription }}
         </div>
       </div>
       <div class="row">
@@ -15,35 +17,53 @@
         </div>
         <div class="two wide middle aligned column">
           <label id="temperatureLabel" class="ui massive circular label ">
-            {{ weather.temp }}&deg;C
+            {{ $t("CELCIUS_TEMPERATURE", { temp: weather.temp }) }}
           </label>
         </div>
         <div class="ten wide middle aligned column">
-          <div class="row">
-            {{ weather.weatherType }} -
-            {{ weather.weatherDescription }}
-          </div>
           <div class="ui four equal width column stackable grid">
             <div class="middle aligned column">
               <div class="row">
-                {{ $t("MAX_TEMPERATURE") }} {{ weather.tempMax || "n/a" }}
+                {{ $t("MAX_TEMPERATURE") }}
+                <span v-if="weather.tempMax">
+                  {{ $t("CELCIUS_TEMPERATURE", { temp: weather.tempMax }) }}
+                </span>
+                <span v-else>
+                  {{ $t("N/A") }}
+                </span>
               </div>
               <div class="row">
-                Min temperature: {{ weather.tempMin || "n/a" }}
+                {{ $t("MIN_TEMPERATURE") }}
+                <span v-if="weather.tempMin">
+                  {{ $t("CELCIUS_TEMPERATURE", { temp: weather.tempMin }) }}
+                </span>
+                <span v-else>
+                  {{ $t("N/A") }}
+                </span>
               </div>
             </div>
             <div class="middle aligned column">
-              <div class="row">Rain: {{ weather.rain || "n/a" }}</div>
-              <div class="row">Snow: {{ weather.snow || "n/a" }}</div>
-            </div>
-            <div class="middle aligned column">
-              <div class="row">Clouds: {{ weather.clouds || "n/a" }}</div>
-              <div class="row">Humidity: {{ weather.humidity || "n/a" }}</div>
-            </div>
-            <div class="middle aligned column">
-              <div class="row">Pressure: {{ weather.pressure || "n/a" }}</div>
               <div class="row">
-                Wind:
+                {{ $t("RAIN") }}: {{ weather.rain || "n/a" }}
+              </div>
+              <div class="row">
+                {{ $t("SNOW") }}: {{ weather.snow || "n/a" }}
+              </div>
+            </div>
+            <div class="middle aligned column">
+              <div class="row">
+                {{ $t("CLOUDS") }}: {{ weather.clouds || "n/a" }}
+              </div>
+              <div class="row">
+                {{ $t("HUMIDITY") }}: {{ weather.humidity || "n/a" }}
+              </div>
+            </div>
+            <div class="middle aligned column">
+              <div class="row">
+                {{ $t("PRESSURE") }}: {{ weather.pressure || "n/a" }}
+              </div>
+              <div class="row">
+                {{ $t("WIND") }}:
                 {{
                   getWindDirection(weather.wind ? weather.wind.direction : 400)
                 }}

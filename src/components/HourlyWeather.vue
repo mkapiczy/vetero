@@ -6,13 +6,13 @@
   >
     <div class="ui stackable grid">
       <div class="three wide column">
-        <div class="ui button">Daily Summary</div>
+        <div class="ui button">{{ $t("DAILY_SUMMARY") }}</div>
       </div>
       <div class="three wide column">
-        <div class="ui button">Hourly</div>
+        <div class="ui button">{{ $t("HOURLY") }}</div>
       </div>
       <div class="three wide column">
-        <div class="ui button">Details</div>
+        <div class="ui button">{{ $t("DETAILS") }}</div>
       </div>
     </div>
 
@@ -34,13 +34,21 @@
           <div class="content">
             <span class="center floated">
               <i class="temperature high icon"></i>
-              {{ forecast.temp }}
+              {{
+                $t("CELCIUS_TEMPERATURE", {
+                  temp: forecast.temp
+                })
+              }}
             </span>
           </div>
           <div class="content">
             <span class="center floated">
               <i class="tint icon"></i>
-              {{ forecast.humidity }}%
+              {{
+                $t("HUMIDITY_PERC", {
+                  humidity: forecast.humidity
+                })
+              }}
             </span>
           </div>
         </div>
