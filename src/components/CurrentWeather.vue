@@ -1,9 +1,5 @@
 <template>
-  <div
-    id="currentWeather"
-    class="ui top attached segment"
-    :class="{ loading: isLoading }"
-  >
+  <div id="currentWeather" class="ui segment" :class="{ loading: isLoading }">
     <div id="weatherCard" class="ui grid stackable">
       <div class="row">
         <div class="sixteen wide middle aligned column">
@@ -49,9 +45,7 @@
               <div class="row">
                 Wind:
                 {{
-                  getWindDirection(
-                    weather.wind ? weather.wind.direction : "n/a"
-                  )
+                  getWindDirection(weather.wind ? weather.wind.direction : 400)
                 }}
                 | {{ weather.wind ? weather.wind.speed : "n/a" }}m/s
               </div>
@@ -98,7 +92,7 @@ export default class CurrentWeather extends Vue {
   @Prop() private isLoading!: boolean;
   @Prop() private weather: Weather;
 
-  getWindDirection(degrees) {
+  getWindDirection(degrees: number) {
     if (degrees === 0 || degrees === 360) {
       return "N";
     } else if (degrees > 0 && degrees < 90) {

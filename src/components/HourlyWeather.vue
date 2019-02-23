@@ -4,6 +4,18 @@
     class="ui bottom attached segment"
     :class="{ loading: isLoading }"
   >
+    <div class="ui stackable grid">
+      <div class="three wide column">
+        <div class="ui button">Daily Summary</div>
+      </div>
+      <div class="three wide column">
+        <div class="ui button">Hourly</div>
+      </div>
+      <div class="three wide column">
+        <div class="ui button">Details</div>
+      </div>
+    </div>
+
     <div class="ui stackable eight column grid">
       <div
         class="column"

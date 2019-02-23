@@ -1,5 +1,5 @@
 <template>
-  <div id="dayMenu" class="ui top attached tabular stackable menu">
+  <div id="dayMenu" class="ui top attached stackable tabular menu">
     <a
       class="item"
       v-for="singleDayWeather in forecastsByDay"

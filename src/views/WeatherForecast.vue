@@ -1,6 +1,28 @@
 <template>
   <div id="main" class="ui flex container">
     <!-- TODO Search menu-->
+    <div id="citySelector" class="ui container">
+      <div
+        class="ui fluid search selection simple dropdown"
+        :class="{ active: focused }"
+      >
+        <input
+          class="search"
+          type="text"
+          autocomplete="off"
+          placeholder="Select City"
+          v-model.trim="selectedCity"
+        />
+
+        <i class="dropdown icon" @click="focused = !focused"></i>
+        <!--<div class="default text">Select Country</div>-->
+        <div class="transition menu" :class="{ visible: focused }">
+          <div class="item" v-for="city in filteredCities" :key="city">
+            {{ city }}
+          </div>
+        </div>
+      </div>
+    </div>
     <CurrentWeather :weather="currentWeather" :isLoading="isLoading" />
     <DayMenu
       :forecastsByDay="forecastsByDay"
@@ -13,10 +35,20 @@
 <style scoped lang="scss">
 #main {
   display: flex;
+  padding-top: 15px;
+  padding-bottom: 15px;
   flex-direction: column;
   height: 100%;
 }
 
+.ui.fluid.dropdown {
+  z-index: 10;
+}
+
+.ui.simple.active.dropdown > .menu,
+.ui.simple.dropdown:hover > .menu {
+  overflow-y: scroll !important;
+}
 #mainWeather {
 }
 </style>
@@ -26,7 +58,9 @@ import CurrentWeather from "@/components/CurrentWeather.vue"; // @ is an alias t
 import HourlyWeather from "@/components/HourlyWeather.vue"; // @ is an alias to /src
 import DayMenu from "@/components/DayMenu.vue"; // @ is an alias to /src
 import WeatherService from "../services/WeatherService";
+import CityService from "../services/CityService";
 import { SingleDayForecast, Weather } from "../services/WeatherService";
+import fuzzy from "fuzzy";
 
 @Component({
   components: {
@@ -36,22 +70,42 @@ import { SingleDayForecast, Weather } from "../services/WeatherService";
   }
 })
 export default class WeatherForecast extends Vue {
-  currentWeather: Weather = {};
-  forecastsByDay: Array<SingleDayForecast> = [];
+  currentWeather: undefined | Weather = {};
+  forecastsByDay: undefined | Array<SingleDayForecast> = [];
   forecastForSelectedDay: SingleDayForecast = {};
   isLoading: boolean = true;
-  forecastRetrivalTime: null | Date = null;
+  forecastRetrivalTime: any;
+  cities: Array<any> = [];
+  selectedCity: any = "";
+  focused: boolean = false;
+
+  get filteredCities() {
+    const fuzzyFilterOptions = {
+      extract: (el: any) => el.name
+    };
+
+    return fuzzy
+      .filter(this.selectedCity, this.cities, fuzzyFilterOptions)
+      .slice(0, 10)
+      .map((item: any) => item.original.name);
+  }
 
   chooseDay(selectedDayForecast: SingleDayForecast) {
     this.forecastForSelectedDay = selectedDayForecast;
   }
   created() {
-    return WeatherService.getWeatherForecast("").then(forecast => {
+    WeatherService.getWeatherForecast("").then(forecast => {
       this.forecastsByDay = forecast.forecastByDay;
       this.currentWeather = forecast.currentWeather;
       this.forecastRetrivalTime = forecast.ts;
-      this.forecastForSelectedDay = this.forecastsByDay[0];
+      this.forecastForSelectedDay = this.forecastsByDay
+        ? this.forecastsByDay[0]
+        : {};
       this.isLoading = false;
+    });
+
+    CityService.getCities().then(cities => {
+      this.cities = cities;
     });
   }
 }
