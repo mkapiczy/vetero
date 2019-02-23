@@ -2,6 +2,7 @@ import http from "axios";
 import _ from "lodash";
 import moment from "moment";
 import * as math from "mathjs";
+import { BigNumber } from "mathjs";
 
 const API_URL = process.env.VUE_APP_API_URL;
 const API_KEY = process.env.VUE_APP_API_KEY;
@@ -87,7 +88,7 @@ const mapToWeatherClass = (w: any): Weather => {
     tempMin: Math.round(w.main.temp_min),
     tempMax: Math.round(w.main.temp_max),
     pressure: w.main.pressure,
-    humidity: w.main.humidity,
+    humidity: _.round(w.main.humidity, 1),
     weatherType: w.weather ? w.weather[0].main : "",
     weatherDescription: w.weather ? w.weather[0].description : "",
     icon: "http://openweathermap.org/img/w/" + w.weather[0].icon + ".png",
@@ -123,7 +124,10 @@ const getAverageWeatherForDay = (
     tempMin: math.min(dailyForecast.map((f: Weather) => f.tempMin || 0)),
     tempMax: math.max(dailyForecast.map((f: Weather) => f.tempMax || 0)),
     tempAvg: math.mean(dailyForecast.map((f: Weather) => f.temp || 0)),
-    humidity: math.mean(dailyForecast.map((f: Weather) => f.humidity || 0))
+    humidity: _.round(
+      math.mean(dailyForecast.map((f: Weather) => f.humidity || 0)),
+      1
+    )
   };
 };
 
