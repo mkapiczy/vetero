@@ -56,7 +56,6 @@ const getWeatherForecast = (cityId: number): Promise<Forecast> => {
     .get(requestUrl)
     .then(res => {
       if (res && res.data) {
-        console.log("Res", res.data);
         return mapResponseToForecast(res.data, cityId);
       }
       return {};

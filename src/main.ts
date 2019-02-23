@@ -3,7 +3,9 @@ import App from "./App.vue";
 import router from "./router";
 import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
+import VueGoogleCharts from "vue-google-charts";
 
+Vue.use(VueGoogleCharts);
 import { languages } from "@/i18n";
 import { defaultLocale } from "@/i18n";
 const messages = Object.assign(languages);

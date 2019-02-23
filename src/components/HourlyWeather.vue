@@ -6,17 +6,22 @@
   >
     <div class="ui stackable grid">
       <div class="three wide column">
-        <div class="ui button">{{ $t("DAILY_SUMMARY") }}</div>
+        <div class="ui button" @click="mode = 'SUMMARY'">
+          {{ $t("DAILY_SUMMARY") }}
+        </div>
       </div>
       <div class="three wide column">
-        <div class="ui button">{{ $t("HOURLY") }}</div>
+        <div class="ui button" @click="mode = 'HOURLY'">{{ $t("HOURLY") }}</div>
       </div>
       <div class="three wide column">
-        <div class="ui button">{{ $t("DETAILS") }}</div>
+        <div class="ui button" @click="mode = 'DETAILS'">
+          {{ $t("DETAILS") }}
+        </div>
       </div>
     </div>
 
-    <div class="ui stackable eight column grid">
+    <DailySummary :weather="weather" v-if="mode === 'SUMMARY'" />
+    <div class="ui stackable eight column grid" v-show="mode === 'HOURLY'">
       <div
         class="column"
         v-for="forecast in weather ? weather.forecast : []"
@@ -67,10 +72,16 @@
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { SingleDayForecast } from "@/services/WeatherService";
-
-@Component
+import DailySummary from "./DailySummary";
+@Component({
+  components: {
+    DailySummary
+  }
+})
 export default class HourlyWeather extends Vue {
   @Prop() private weather: SingleDayForecast;
   @Prop() private isLoading: boolean;
+
+  mode: string = "HOURLY";
 }
 </script>

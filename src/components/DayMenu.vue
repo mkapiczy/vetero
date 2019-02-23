@@ -51,7 +51,7 @@
 <style scoped lang="scss">
 #dayMenu {
   flex: none;
-  min-height: 30%;
+  min-height: 20%;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 0;

@@ -4,3 +4,4 @@ declare module "*.vue" {
 }
 
 declare module "@/i18n";
+declare module "vue-google-charts";
