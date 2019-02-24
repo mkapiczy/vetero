@@ -2,7 +2,7 @@
   <div
     id="dayMenu"
     class="ui top attached tabular menu segment"
-    :class="{ disabled: disabled, loading: disabled }"
+    :class="{ loading: disabled }"
   >
     <a
       class="item"

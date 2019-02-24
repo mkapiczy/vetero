@@ -2,7 +2,7 @@
   <div class="ui container">
     <div
       class="ui fluid search selection simple dropdown"
-      :class="{ disabled: disabled }"
+      :class="{ loading: disabled }"
     >
       <input
         class="search"

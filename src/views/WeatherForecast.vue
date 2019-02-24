@@ -3,20 +3,20 @@
     <CitySelector
       :cities="cities"
       @citySelected="onCitySelected"
-      :disabled="isLoading"
+      :disabled="isCityLoading"
     />
     <CurrentWeather
       :weather="currentWeather"
-      :isLoading="isLoading"
+      :isLoading="isWeatherLoading"
       :currentCity="selectedCity.name"
     />
     <DayMenu
       :forecastsByDay="forecastsByDay"
       :forecastForSelectedDay="forecastForSelectedDay"
       @daySelected="onDaySelected"
-      :disabled="isLoading"
+      :disabled="isWeatherLoading"
     />
-    <HourlyWeather :weather="forecastForSelectedDay" :isLoading="isLoading" />
+    <Forecast :weather="forecastForSelectedDay" :isLoading="isWeatherLoading" />
   </div>
 </template>
 
@@ -34,7 +34,7 @@
 import _ from "lodash";
 import { Component, Vue } from "vue-property-decorator";
 import CurrentWeather from "@/components/CurrentWeather.vue"; // @ is an alias to /src
-import HourlyWeather from "@/components/HourlyWeather.vue"; // @ is an alias to /src
+import Forecast from "@/components/Forecast/Forecast.vue"; // @ is an alias to /src
 import DayMenu from "@/components/DayMenu.vue"; // @ is an alias to /src
 import CitySelector from "@/components/CitySelector.vue"; // @ is an alias to /src
 import WeatherService from "../services/WeatherService";
@@ -42,7 +42,7 @@ import CityService from "../services/CityService";
 import {
   SingleDayForecast,
   Weather,
-  Forecast
+  Forecast as ForecastType
 } from "../services/WeatherService";
 
 import { City } from "../services/CityService";
@@ -51,7 +51,7 @@ import { City } from "../services/CityService";
   components: {
     CitySelector,
     CurrentWeather,
-    HourlyWeather,
+    Forecast,
     DayMenu
   }
 })
@@ -59,7 +59,8 @@ export default class WeatherForecast extends Vue {
   currentWeather: undefined | Weather = {};
   forecastsByDay: undefined | Array<SingleDayForecast> = [];
   forecastForSelectedDay: SingleDayForecast = {};
-  isLoading: boolean = true;
+  isWeatherLoading: boolean = false;
+  isCityLoading: boolean = false;
   forecastRetrivalTime: any;
   cities: ReadonlyArray<City> = [];
   selectedCity: City = {};
@@ -70,14 +71,15 @@ export default class WeatherForecast extends Vue {
   }
 
   onCitySelected(city: any) {
-    this.isLoading = true;
+    this.isWeatherLoading = true;
     this.selectedCity = city;
     this.getWeatherForecast(city.id).then(() => {
-      this.isLoading = false;
+      this.isWeatherLoading = false;
     });
   }
 
-  getWeatherForecast(cityId: number): Promise<Forecast> {
+  getWeatherForecast(cityId: number): Promise<ForecastType> {
+    this.isWeatherLoading = true;
     return WeatherService.getWeatherForecast(cityId)
       .then(forecast => {
         this.forecastsByDay = forecast.forecastByDay;
@@ -86,37 +88,30 @@ export default class WeatherForecast extends Vue {
         this.forecastForSelectedDay = this.forecastsByDay
           ? this.forecastsByDay[0]
           : {};
+        this.isWeatherLoading = false;
         return forecast;
       })
       .catch(err => {
         console.error("Get weather error", err);
+        this.isWeatherLoading = false;
         return {};
       });
   }
 
   getCities(): Promise<ReadonlyArray<City>> {
+    this.isCityLoading = true;
     return CityService.getCities().then(cities => {
       this.cities = cities;
       this.selectedCity =
         _.find(this.cities, c => c.id === this.defaultCityId) || {};
+      this.isCityLoading = false;
       return cities;
     });
   }
 
   created() {
-    this.isLoading = true;
-    const promises: [Promise<Forecast>, Promise<ReadonlyArray<City>>] = [
-      this.getWeatherForecast(this.defaultCityId),
-      this.getCities()
-    ];
-    return Promise.all(promises)
-      .then(() => {
-        this.isLoading = false;
-      })
-      .catch(err => {
-        console.error(err);
-        this.isLoading = false;
-      });
+    this.getWeatherForecast(this.defaultCityId);
+    this.getCities();
   }
 }
 </script>
