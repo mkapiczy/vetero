@@ -109,7 +109,8 @@ export default class Main extends Vue {
   }
 
   created() {
-    this.getWeatherForecast(this.selectedCity.id);
+    if (this.selectedCity && this.selectedCity.id)
+      this.getWeatherForecast(this.selectedCity.id);
     this.getCities();
   }
 }
