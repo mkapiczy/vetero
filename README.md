@@ -74,14 +74,16 @@ The application was designed to be responsive.
 ### Tradeoffs
 
 - Styling - not much focus was put on the styling and theming. Although the application was designed to be responsive and user friendly more styling adjustments could be made,
-- CitySelector - the list of cities with available weather is currently retrieved from the json file. What is more the size of the file causes time 29.7 MB causes relatively long data loading on application startup.
+- CitySelector - the list of cities with available weather is currently retrieved from the json file, which is time and memory consuming (the file size is almost 30Mb). This should be managed in a different way, probably best to delegate debounced requests to the server and let the server do the filtering.
+- Default city - for now it is (very ugly) hardcoded to Warsaw. It should be determined based on browser's navigator API (e.g. using vue-browser-geolocation module) or IP lookup.
 - Metrics - The application supports only Celcius metric, while Kelvin, and Fahrenheit metrics are also supported by the OpenWeatherAPI,
 - Usage of OpenWeatherMap default weather icons - A set of custom icons should be used.
-- Wind direction indicator - right now it is a string representation "N | NE | E | SE | S | WS | W | NW" a visual representation would be better.
-- The Daily Summary forecast view with charts could be made more rich including more data (e.g rain, humodity) and more chart styling.
-- The Details forecast views could also be improved showing more rich content.
-- Internationalization - for now support only of english language, though i18n support is configured so extension to more languages should be easy,
+
 
 ### Possible Future Work
-- Dealing with the tradeoffs
-
+- Dealing with the tradeoffs,
+- Optimize webpack chunk splitting configuration.
+- Internationalization - for now support only of english language, though i18n support is configured so extension to more languages should be easy,
+- Wind direction indicator - right now it is a string representation "N | NE | E | SE | S | WS | W | NW" a visual representation would be better.
+- The Daily Summary forecast view with charts could be made more rich including more data (e.g rain, humidity) and more chart styling.
+- The Details forecast views could also be improved showing more rich content.
