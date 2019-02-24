@@ -5,6 +5,7 @@
   "HOURLY": "Hourly",
   "HUMIDITY_PERC": "{humidity}%",
   "MAX_TEMPERATURE": "Max temperature:",
+  "MEAN_TEMPERATURE": "Mean temperature:",
   "MIN_TEMPERATURE": "Min temperature:",
   "N/A": "n/a",
   "WEATHER_IN": "Weather in {city}",

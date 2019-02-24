@@ -1,16 +1,12 @@
 <template>
-  <div class="ui stackable grid">
-    <div class="three wide column">
+  <div class="ui grid" style="margin-top: 0.5em; margin-bottom: 0.5em;">
+    <div class="ui blue buttons">
       <div class="ui button" @click="onModeChange('HOURLY')">
         {{ $t("HOURLY") }}
       </div>
-    </div>
-    <div class="three wide column">
       <div class="ui button" @click="onModeChange('SUMMARY')">
         {{ $t("DAILY_SUMMARY") }}
       </div>
-    </div>
-    <div class="three wide column">
       <div class="ui button" @click="onModeChange('DETAILS')">
         {{ $t("DETAILS") }}
       </div>

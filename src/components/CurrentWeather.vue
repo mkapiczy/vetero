@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="two wide middle aligned column">
-          <label id="temperatureLabel" class="ui massive circular label ">
+          <label id="temperatureLabel" class="ui massive circular blue label ">
             {{ $t("CELCIUS_TEMPERATURE", { temp: weather.temp }) }}
           </label>
         </div>

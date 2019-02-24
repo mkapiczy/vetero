@@ -16,7 +16,7 @@ export class Forecast {
 
 export class SingleDayForecast {
   date?: string;
-  averageWeather?: AverageWeather;
+  averageWeather?: Weather;
   forecast?: Array<Weather>;
 }
 
@@ -40,13 +40,6 @@ export class Weather {
 export class Wind {
   direction?: number;
   speed?: number;
-}
-
-export class AverageWeather {
-  tempMin?: number;
-  tempMax?: number;
-  tempAvg?: number;
-  humidity?: number;
 }
 
 const getWeatherForecast = (cityId: number): Promise<Forecast> => {
@@ -116,17 +109,34 @@ const groupForecastsByDay = (
   });
 };
 
-const getAverageWeatherForDay = (
-  dailyForecast: Array<Weather>
-): AverageWeather => {
+const getAverageWeatherForDay = (dailyForecast: Array<Weather>): Weather => {
   return {
+    temp: math.mean(dailyForecast.map((f: Weather) => f.temp || 0)),
     tempMin: math.min(dailyForecast.map((f: Weather) => f.tempMin || 0)),
     tempMax: math.max(dailyForecast.map((f: Weather) => f.tempMax || 0)),
-    tempAvg: math.mean(dailyForecast.map((f: Weather) => f.temp || 0)),
     humidity: _.round(
       math.mean(dailyForecast.map((f: Weather) => f.humidity || 0)),
       1
-    )
+    ),
+    pressure: _.round(
+      math.mean(dailyForecast.map((f: Weather) => f.pressure || 0)),
+      1
+    ),
+    clouds: _.round(
+      math.mean(dailyForecast.map((f: Weather) => f.clouds || 0)),
+      1
+    ),
+    rain: _.round(math.mean(dailyForecast.map((f: Weather) => f.rain || 0)), 1),
+    snow: _.round(math.mean(dailyForecast.map((f: Weather) => f.snow || 0)), 1),
+    wind: {
+      direction: undefined,
+      speed: _.round(
+        math.mean(
+          dailyForecast.map((f: Weather) => (f.wind ? f.wind.speed || 0 : 0))
+        ),
+        1
+      )
+    }
   };
 };
 

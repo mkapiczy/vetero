@@ -9,13 +9,6 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-#hourly {
-  flex: none;
-  min-height: 35%;
-}
-</style>
-
 <script lang="ts">
 import { Component, Prop, Vue } from "vue-property-decorator";
 import { SingleDayForecast } from "../../services/WeatherService";
