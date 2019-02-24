@@ -32,7 +32,7 @@ import ForecastModeMenu from "@/components/Forecast/ForecastModeMenu.vue";
     ForecastModeMenu
   }
 })
-export default class HourlyWeather extends Vue {
+export default class Forecast extends Vue {
   @Prop() private weather: SingleDayForecast;
   @Prop() private isLoading: boolean;
 

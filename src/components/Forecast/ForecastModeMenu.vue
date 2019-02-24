@@ -26,10 +26,10 @@
 </style>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class HourlyWeather extends Vue {
+export default class ForecastModeMenu extends Vue {
   mode: string = "HOURLY";
 
   onModeChange(mode: string) {
