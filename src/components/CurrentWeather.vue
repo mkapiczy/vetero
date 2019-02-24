@@ -1,9 +1,5 @@
 <template>
-  <div
-    id="currentWeather"
-    class="ui segment"
-    :class="{ loading: isWeatherLoading }"
-  >
+  <div id="currentWeather" class="ui segment" :class="{ loading: isLoading }">
     <div id="weatherCard" class="ui grid stackable">
       <div class="row">
         <div class="sixteen wide middle aligned column">

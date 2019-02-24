@@ -2,7 +2,7 @@
   <div
     id="forecast"
     class="ui bottom attached segment"
-    :class="{ loading: isWeatherLoading }"
+    :class="{ loading: isLoading }"
   >
     <ForecastModeMenu @modeChange="onModeChange" />
 

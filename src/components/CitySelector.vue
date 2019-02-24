@@ -2,13 +2,13 @@
   <div class="ui container">
     <div
       class="ui fluid search selection simple dropdown"
-      :class="{ loading: disabled }"
+      :class="{ loading: isLoading }"
     >
       <input
         class="search"
         type="text"
         autocomplete="off"
-        :placeholder="$t('SELECT_CITY')"
+        :placeholder="isLoading ? $t('LOADING_DATA') : $t('SELECT_CITY')"
         v-model.trim="citySearchTerm"
       />
 
@@ -46,7 +46,7 @@ import { City } from "../services/CityService";
 @Component
 export default class CitySelector extends Vue {
   @Prop() private cities!: Array<City>;
-  @Prop() private disabled!: boolean;
+  @Prop() private isLoading!: boolean;
 
   citySearchTerm: any = "";
   maxItems: number = 10;

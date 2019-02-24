@@ -3,7 +3,7 @@
     <CitySelector
       :cities="cities"
       @citySelected="onCitySelected"
-      :disabled="isCityLoading"
+      :isLoading="isCityLoading"
     />
     <CurrentWeather
       :weather="currentWeather"
