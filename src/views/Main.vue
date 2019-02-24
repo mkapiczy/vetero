@@ -62,9 +62,12 @@ export default class Main extends Vue {
   isWeatherLoading: boolean = false;
   isCityLoading: boolean = false;
   cities: ReadonlyArray<City> = [];
-  selectedCity: City = {};
   // TODO -  Hardcoded for now - default user location to be determined using location from the browser or initialy show page without a forecast
-  defaultCityId: number = 7531926;
+  selectedCity: City = {
+    id: 7531926,
+    name: "Warszawa",
+    country: "PL"
+  };
 
   onDaySelected(selectedDayForecast: SingleDayForecast) {
     this.forecastForSelectedDay = selectedDayForecast;
@@ -99,14 +102,14 @@ export default class Main extends Vue {
     return CityService.getCities().then(cities => {
       this.cities = cities;
       this.selectedCity =
-        _.find(this.cities, c => c.id === this.defaultCityId) || {};
+        _.find(this.cities, c => c.id === this.selectedCity.id) || {};
       this.isCityLoading = false;
       return cities;
     });
   }
 
   created() {
-    this.getWeatherForecast(this.defaultCityId);
+    this.getWeatherForecast(this.selectedCity.id);
     this.getCities();
   }
 }
