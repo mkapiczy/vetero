@@ -41,6 +41,13 @@ export class Wind {
   speed?: number;
 }
 
+/**
+ * Gets weather forecast.
+ * @function
+ * @memberof WeatherService
+ *
+ * @return { Promise<Forecast> }
+ */
 const getWeatherForecast = (cityId: number): Promise<Forecast> => {
   const requestUrl =
     API_URL + "?id=" + cityId + "&units=metric" + "&APPID=" + API_KEY;
@@ -58,6 +65,13 @@ const getWeatherForecast = (cityId: number): Promise<Forecast> => {
     });
 };
 
+/**
+ * Maps Openweather API response to the Forecast class object.
+ * @function
+ * @memberof WeatherService
+ *
+ * @return { Promise<Forecast> }
+ */
 const mapResponseToForecast = (data: any, cityId: number): Forecast => {
   let weatherList: Array<Weather> = _.map(data.list || [], w =>
     mapToWeatherClass(w)
@@ -65,11 +79,18 @@ const mapResponseToForecast = (data: any, cityId: number): Forecast => {
   let forecast = new Forecast();
   forecast.ts = new Date();
   forecast.cityId = cityId;
-  forecast.forecastByDay = groupForecastsByDay(weatherList);
+  forecast.forecastByDay = groupWeathersByDay(weatherList);
   forecast.currentWeather = getCurrentWeather(forecast.forecastByDay[0]);
   return forecast;
 };
 
+/**
+ * Maps single element from the Openweather API response to the Weather class object.
+ * @function
+ * @memberof WeatherService
+ *
+ * @return { Weather }
+ */
 const mapToWeatherClass = (w: any): Weather => {
   let dateAndTime = w.dt_txt.split(" ");
   return {
@@ -93,10 +114,17 @@ const mapToWeatherClass = (w: any): Weather => {
   };
 };
 
-const groupForecastsByDay = (
-  forecasts: Array<Weather>
+/**
+ * Groups weather elements by day.
+ * @function
+ * @memberof WeatherService
+ *
+ * @return { Array<SingleDayForecast> }
+ */
+const groupWeathersByDay = (
+  weathers: Array<Weather>
 ): Array<SingleDayForecast> => {
-  let forecastsByDay = _.groupBy(forecasts, result =>
+  let forecastsByDay = _.groupBy(weathers, result =>
     moment(result.date, "YYYY-MM-DD").startOf("day")
   );
   return _.map(forecastsByDay, f => {
@@ -108,9 +136,16 @@ const groupForecastsByDay = (
   });
 };
 
+/**
+ * Gets an average weather from daily forecast by providing mean, max and minimum values of conditions.
+ * @function
+ * @memberof WeatherService
+ *
+ * @return { Weather }
+ */
 const getAverageWeatherForDay = (dailyForecast: Array<Weather>): Weather => {
   return {
-    temp: math.mean(dailyForecast.map((f: Weather) => f.temp || 0)),
+    temp: Math.round(math.mean(dailyForecast.map((f: Weather) => f.temp || 0))),
     tempMin: math.min(dailyForecast.map((f: Weather) => f.tempMin || 0)),
     tempMax: math.max(dailyForecast.map((f: Weather) => f.tempMax || 0)),
     humidity: _.round(
@@ -139,12 +174,27 @@ const getAverageWeatherForDay = (dailyForecast: Array<Weather>): Weather => {
   };
 };
 
+/**
+ * Gets a current weather.
+ *
+ * @function
+ * @memberof WeatherService
+ *
+ * @return { Weather }
+ */
 const getCurrentWeather = (currentDayForecast: SingleDayForecast): Weather => {
   return currentDayForecast && currentDayForecast.forecast
     ? currentDayForecast.forecast[0]
     : {};
 };
 
+/**
+ * Gets string representation of wind direction based on the degrees value.
+ * @function
+ * @memberof WeatherService
+ *
+ * @return { string } String representation of the direction.
+ */
 const getWindDirection = (degrees: number): string => {
   if (degrees === 0 || degrees === 360) {
     return "N";
@@ -166,6 +216,13 @@ const getWindDirection = (degrees: number): string => {
     return "n/a";
   }
 };
+
+/**
+ * Weather service: A service for weather related functionalities.
+ * @module WeatherService
+ * @namespace WeatherService
+ * @version 1.0.0
+ */
 export default {
   SingleDayForecast,
   Forecast,

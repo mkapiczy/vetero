@@ -8,7 +8,7 @@
       class="item"
       v-for="singleDayWeather in forecastsByDay"
       :key="singleDayWeather.date"
-      @click="onDayChosen(singleDayWeather)"
+      @click="onDaySelected(singleDayWeather)"
       :class="{
         active: forecastForSelectedDay.date === singleDayWeather.date
       }"
@@ -78,7 +78,7 @@ export default class DayMenu extends Vue {
   @Prop() private forecastsByDay!: Array<SingleDayForecast>;
   @Prop() private disabled!: boolean;
 
-  onDayChosen(selectedDayForecast: SingleDayForecast) {
+  onDaySelected(selectedDayForecast: SingleDayForecast) {
     this.$emit("daySelected", selectedDayForecast);
   }
 }

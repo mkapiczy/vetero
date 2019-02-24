@@ -33,10 +33,10 @@
 <script lang="ts">
 import _ from "lodash";
 import { Component, Vue } from "vue-property-decorator";
-import CurrentWeather from "@/components/CurrentWeather.vue"; // @ is an alias to /src
-import Forecast from "@/components/Forecast/Forecast.vue"; // @ is an alias to /src
-import DayMenu from "@/components/DayMenu.vue"; // @ is an alias to /src
-import CitySelector from "@/components/CitySelector.vue"; // @ is an alias to /src
+import CurrentWeather from "@/components/CurrentWeather.vue";
+import Forecast from "@/components/Forecast/Forecast.vue";
+import DayMenu from "@/components/DayMenu.vue";
+import CitySelector from "@/components/CitySelector.vue";
 import WeatherService from "../services/WeatherService";
 import CityService from "../services/CityService";
 import {
@@ -55,15 +55,15 @@ import { City } from "../services/CityService";
     DayMenu
   }
 })
-export default class WeatherForecast extends Vue {
+export default class Main extends Vue {
   currentWeather: undefined | Weather = {};
   forecastsByDay: undefined | Array<SingleDayForecast> = [];
   forecastForSelectedDay: SingleDayForecast = {};
   isWeatherLoading: boolean = false;
   isCityLoading: boolean = false;
-  forecastRetrivalTime: any;
   cities: ReadonlyArray<City> = [];
   selectedCity: City = {};
+  // TODO -  Hardcoded for now - default user location to be determined using location from the browser or initialy show page without a forecast
   defaultCityId: number = 7531926;
 
   onDaySelected(selectedDayForecast: SingleDayForecast) {
@@ -71,11 +71,8 @@ export default class WeatherForecast extends Vue {
   }
 
   onCitySelected(city: any) {
-    this.isWeatherLoading = true;
     this.selectedCity = city;
-    this.getWeatherForecast(city.id).then(() => {
-      this.isWeatherLoading = false;
-    });
+    return this.getWeatherForecast(city.id);
   }
 
   getWeatherForecast(cityId: number): Promise<ForecastType> {
@@ -84,7 +81,6 @@ export default class WeatherForecast extends Vue {
       .then(forecast => {
         this.forecastsByDay = forecast.forecastByDay;
         this.currentWeather = forecast.currentWeather;
-        this.forecastRetrivalTime = forecast.ts;
         this.forecastForSelectedDay = this.forecastsByDay
           ? this.forecastsByDay[0]
           : {};
@@ -92,7 +88,7 @@ export default class WeatherForecast extends Vue {
         return forecast;
       })
       .catch(err => {
-        console.error("Get weather error", err);
+        console.error("Error while getting weather forecast", err);
         this.isWeatherLoading = false;
         return {};
       });

@@ -6,6 +6,15 @@ export class City {
   name?: string;
   country?: string;
 }
+
+/**
+ * Reads a list of cities in the world
+ * @function
+ * @memberof CityService
+ *
+ * @return { Promise<ReadonlyArray<City>> } Readonly array of cities.
+ * Readonly to tell vue that it does not need to observe the value reactively (rendering improvement for big arrays)
+ */
 const getCities = (): Promise<ReadonlyArray<City>> => {
   return http.get("./city.list.json").then(resp => {
     return Object.freeze(
@@ -16,6 +25,13 @@ const getCities = (): Promise<ReadonlyArray<City>> => {
     );
   });
 };
+
+/**
+ * City service: A service for managing cities data.
+ * @module CityService
+ * @namespace CityService
+ * @version 1.0.0
+ */
 export default {
   getCities
 };

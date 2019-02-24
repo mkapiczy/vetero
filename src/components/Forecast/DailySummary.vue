@@ -31,7 +31,7 @@ export default class DailySummary extends Vue {
   chartOptions = {
     chart: {
       title: "Daily Weather Summary",
-      subtitle: "Temperature: 0:00-23:59"
+      subtitle: "Temperature"
     }
   };
 }
