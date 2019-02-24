@@ -2,7 +2,6 @@ import http from "axios";
 import _ from "lodash";
 import moment from "moment";
 import * as math from "mathjs";
-import { BigNumber } from "mathjs";
 
 const API_URL = process.env.VUE_APP_API_URL;
 const API_KEY = process.env.VUE_APP_API_KEY;

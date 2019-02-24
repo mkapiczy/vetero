@@ -7,10 +7,10 @@
     <ForecastModeMenu @modeChange="onModeChange" />
 
     <DailySummary :weather="weather" v-if="mode === 'SUMMARY'" />
-    <Hourly :weather="weather" v-show="mode === 'HOURLY'" />
+    <Hourly :weather="weather" v-if="mode === 'HOURLY'" />
     <Details
       :weather="weather ? weather.averageWeather : {}"
-      v-show="mode === 'DETAILS'"
+      v-if="mode === 'DETAILS'"
     />
   </div>
 </template>
