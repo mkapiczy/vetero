@@ -16,5 +16,6 @@
   "PRESSURE": "Pressure",
   "WIND": "Wind",
   "SELECT_CITY": "Select city",
-  "LOADING_DATA": "Loading..."
+  "LOADING_DATA": "Loading...",
+  "METERS_PER_SECOND": "m/s"
 }

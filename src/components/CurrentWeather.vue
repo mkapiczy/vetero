@@ -64,10 +64,18 @@
               </div>
               <div class="row">
                 {{ $t("WIND") }}:
-                {{
-                  getWindDirection(weather.wind ? weather.wind.direction : 400)
-                }}
-                | {{ weather.wind ? weather.wind.speed : "n/a" }}m/s
+                <span v-if="weather.wind && weather.wind.speed">
+                  {{ weather.wind.speed }}{{ $t("METERS_PER_SECOND") }}
+                </span>
+                <span v-else>
+                  {{ $t("N/A") }}
+                </span>
+                <span v-if="weather.wind && weather.wind.direction">
+                  {{ getWindDirection(weather.wind.direction) }}
+                </span>
+                <span v-else>
+                  {{ $t("N/A") }}
+                </span>
               </div>
             </div>
           </div>

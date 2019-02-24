@@ -49,8 +49,7 @@ export class Wind {
  * @return { Promise<Forecast> }
  */
 const getWeatherForecast = (cityId: number): Promise<Forecast> => {
-  const requestUrl =
-    API_URL + "?id=" + cityId + "&units=metric" + "&APPID=" + API_KEY;
+  const requestUrl = `${API_URL}?id=${cityId}&units=metric&APPID=${API_KEY}`;
   return http
     .get(requestUrl)
     .then(res => {

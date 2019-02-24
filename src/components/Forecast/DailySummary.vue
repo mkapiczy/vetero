@@ -18,14 +18,14 @@ export default class DailySummary extends Vue {
   @Prop() private weather: SingleDayForecast;
 
   get chartDataComputed() {
-    let array = [];
-    array.push(["Hour", "Temperature"]);
-    array.push(
+    let chartData = [];
+    chartData.push(["Hour", "Temperature"]);
+    chartData.push(
       ...(this.weather.forecast || []).map(f => {
         return [f.time, f.temp];
       })
     );
-    return array;
+    return chartData;
   }
 
   chartOptions = {
