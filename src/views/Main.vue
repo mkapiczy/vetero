@@ -73,9 +73,11 @@ export default class Main extends Vue {
     this.forecastForSelectedDay = selectedDayForecast;
   }
 
-  onCitySelected(city: any) {
+  onCitySelected(city: City) {
     this.selectedCity = city;
-    return this.getWeatherForecast(city.id);
+    if (city.id) {
+      return this.getWeatherForecast(city.id);
+    }
   }
 
   getWeatherForecast(cityId: number): Promise<ForecastType> {

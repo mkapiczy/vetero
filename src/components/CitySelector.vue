@@ -18,7 +18,7 @@
           class="item"
           v-for="city in filteredCities"
           :key="city.id"
-          @mousedown.prevent="selectCity(city)"
+          @click="selectCity(city)"
         >
           {{ city.name }} ({{ city.country }})
         </div>
@@ -64,7 +64,7 @@ export default class CitySelector extends Vue {
     );
   }
 
-  selectCity(city: any) {
+  selectCity(city: City) {
     this.$emit("citySelected", city);
   }
 }

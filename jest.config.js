@@ -18,5 +18,6 @@ module.exports = {
     "ts-jest": {
       babelConfig: true
     }
-  }
+  },
+  clearMocks: true
 };

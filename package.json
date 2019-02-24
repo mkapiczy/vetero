@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit",
+    "test": "yarn test:unit && yarn test:e2e",
     "postinstall": "if test \"$NODE_ENV\" = \"production\" ; then yarn build ; fi ",
     "start": "node server.js"
   },
