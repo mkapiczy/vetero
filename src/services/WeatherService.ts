@@ -60,8 +60,8 @@ const getWeatherForecast = (cityId: number): Promise<Forecast> => {
       return {};
     })
     .catch(err => {
-      console.error("Error", err);
-      return Promise.resolve({});
+      console.error("Error in getWeatherForecast", err);
+      return {};
     });
 };
 

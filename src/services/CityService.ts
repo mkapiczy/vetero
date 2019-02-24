@@ -30,8 +30,8 @@ const getCities = (): Promise<ReadonlyArray<City>> => {
       return [];
     })
     .catch(err => {
-      console.error("Error", err);
-      return Promise.resolve([]);
+      console.error("Error in getCities", err);
+      return [];
     });
 };
 
