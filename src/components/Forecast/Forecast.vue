@@ -38,7 +38,7 @@ export default class HourlyWeather extends Vue {
 
   mode: string = "HOURLY";
 
-  onModeChange(mode) {
+  onModeChange(mode: string) {
     this.mode = mode;
   }
 }
