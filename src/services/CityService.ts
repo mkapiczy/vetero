@@ -16,14 +16,23 @@ export class City {
  * Readonly to tell vue that it does not need to observe the value reactively (rendering improvement for big arrays)
  */
 const getCities = (): Promise<ReadonlyArray<City>> => {
-  return http.get("./city.list.json").then(resp => {
-    return Object.freeze(
-      _.map(_.filter(resp.data, c => !_.isEmpty(c.name)), c => {
-        delete c.coord;
-        return c;
-      })
-    );
-  });
+  return http
+    .get("./city.list.json")
+    .then(res => {
+      if (res && res.data) {
+        return Object.freeze(
+          _.map(_.filter(res.data, c => !_.isEmpty(c.name)), c => {
+            delete c.coord;
+            return c;
+          })
+        );
+      }
+      return [];
+    })
+    .catch(err => {
+      console.error("Error", err);
+      return Promise.resolve([]);
+    });
 };
 
 /**

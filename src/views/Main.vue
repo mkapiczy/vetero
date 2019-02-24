@@ -99,13 +99,18 @@ export default class Main extends Vue {
 
   getCities(): Promise<ReadonlyArray<City>> {
     this.isCityLoading = true;
-    return CityService.getCities().then(cities => {
-      this.cities = cities;
-      this.selectedCity =
-        _.find(this.cities, c => c.id === this.selectedCity.id) || {};
-      this.isCityLoading = false;
-      return cities;
-    });
+    return CityService.getCities()
+      .then(cities => {
+        this.cities = cities;
+        this.selectedCity =
+          _.find(this.cities, c => c.id === this.selectedCity.id) || {};
+        this.isCityLoading = false;
+        return cities;
+      })
+      .catch(() => {
+        this.isCityLoading = false;
+        return [];
+      });
   }
 
   created() {
