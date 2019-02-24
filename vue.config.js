@@ -11,6 +11,7 @@ module.exports = {
         ),
         "../semantic-ui/site": path.join(__dirname, "/semantic-ui/site")
       }
-    }
+    },
+    performance: { hints: false }
   }
 };
