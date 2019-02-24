@@ -2,6 +2,7 @@
   <div class="ui grid" style="margin-top: 0.5em; margin-bottom: 0.5em;">
     <div class="ui blue buttons">
       <div
+        id="hourlyModeButton"
         class="ui button"
         @click="onModeChange('HOURLY')"
         :class="{ active: mode === 'HOURLY' }"
@@ -9,6 +10,7 @@
         {{ $t("HOURLY") }}
       </div>
       <div
+        id="summaryModeButton"
         class="ui button"
         @click="onModeChange('SUMMARY')"
         :class="{ active: mode === 'SUMMARY' }"
@@ -16,6 +18,7 @@
         {{ $t("DAILY_SUMMARY") }}
       </div>
       <div
+        id="detailsModeButton"
         class="ui button"
         @click="onModeChange('DETAILS')"
         :class="{ active: mode === 'DETAILS' }"
@@ -42,7 +45,7 @@ export default class ForecastModeMenu extends Vue {
 
   onModeChange(mode: string) {
     this.mode = mode;
-    this.$emit("modeChange", mode);
+    this.$emit("modeChanged", mode);
   }
 }
 </script>

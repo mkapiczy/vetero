@@ -4,7 +4,7 @@
     class="ui bottom attached segment"
     :class="{ loading: isLoading }"
   >
-    <ForecastModeMenu @modeChange="onModeChange" />
+    <ForecastModeMenu @modeChanged="onModeChange" />
 
     <DailySummary :weather="weather" v-if="mode === 'SUMMARY'" />
     <Hourly :weather="weather" v-if="mode === 'HOURLY'" />
