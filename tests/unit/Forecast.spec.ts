@@ -18,13 +18,17 @@ describe("Forecast.vue", () => {
     expect(spy).toHaveBeenCalledTimes(1);
     expect(spy).toHaveBeenCalledWith(newMode);
   });
-  it("should change mode property value when receive modeChanged event from ForecastModeMenu", () => {
-    const newMode = "newMode";
-    const spy = jest.fn();
-    const wrapper = shallowMount(Forecast);
-    wrapper.find(ForecastModeMenu).vm.$emit("modeChanged", newMode);
-    expect(wrapper.vm.$data.mode).toEqual(newMode);
-  });
+  it(
+    "should change mode property value when receive modeChanged event from " +
+      "ForecastModeMenu",
+    () => {
+      const newMode = "newMode";
+      const spy = jest.fn();
+      const wrapper = shallowMount(Forecast);
+      wrapper.find(ForecastModeMenu).vm.$emit("modeChanged", newMode);
+      expect(wrapper.vm.$data.mode).toEqual(newMode);
+    }
+  );
   it("should DailySummary component be present when mode === 'SUMMARY'", () => {
     const wrapper = shallowMount(Forecast);
     wrapper.vm.$data.mode = "SUMMARY";

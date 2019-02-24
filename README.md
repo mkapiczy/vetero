@@ -80,6 +80,8 @@ The application was designed to be responsive.
 - Wind direction indicator - right now it is a string representation "N | NE | E | SE | S | WS | W | NW" a visual representation would be better.
 - The Daily Summary forecast view with charts could be made more rich including more data (e.g rain, humodity) and more chart styling.
 - The Details forecast views could also be improved showing more rich content.
+- Internationalization - for now support only of english language, though i18n support is configured so extension to more languages should be easy,
 
-### Future work
+### Possible Future Work
+- Dealing with the tradeoffs
 
