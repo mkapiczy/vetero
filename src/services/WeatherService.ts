@@ -49,15 +49,11 @@ export class Wind {
  * @return { Promise<Forecast> }
  */
 const getWeatherForecast = (cityId: number): Promise<Forecast> => {
-  const requestUrl = `${API_URL}?id=${cityId}&units=metric&APPID=${API_KEY}`;
   return http
-    .get(requestUrl)
-    .then(res => {
-      if (res && res.data) {
-        return mapResponseToForecast(res.data, cityId);
-      }
-      return {};
-    })
+    .get(`${API_URL}?id=${cityId}&units=metric&APPID=${API_KEY}`)
+    .then(res =>
+      res && res.data ? mapResponseToForecast(res.data, cityId) : {}
+    )
     .catch(err => {
       console.error("Error in getWeatherForecast", err);
       return {};
@@ -72,9 +68,7 @@ const getWeatherForecast = (cityId: number): Promise<Forecast> => {
  * @return { Promise<Forecast> }
  */
 const mapResponseToForecast = (data: any, cityId: number): Forecast => {
-  let weatherList: Array<Weather> = _.map(data.list || [], w =>
-    mapToWeatherClass(w)
-  );
+  let weatherList: Array<Weather> = _.map(data.list || [], mapToWeatherClass);
   let forecast = new Forecast();
   forecast.ts = new Date();
   forecast.cityId = cityId;
@@ -126,13 +120,11 @@ const groupWeathersByDay = (
   let forecastsByDay = _.groupBy(weathers, result =>
     moment(result.date, "YYYY-MM-DD").startOf("day")
   );
-  return _.map(forecastsByDay, f => {
-    let singleDayForecast = new SingleDayForecast();
-    singleDayForecast.date = f[0].date;
-    singleDayForecast.forecast = f;
-    singleDayForecast.averageWeather = getAverageWeatherForDay(f);
-    return singleDayForecast;
-  });
+  return _.map(forecastsByDay, f => ({
+    date: f[0].date,
+    forecast: f,
+    averageWeather: getAverageWeatherForDay(f)
+  }));
 };
 
 /**
@@ -195,25 +187,25 @@ const getCurrentWeather = (currentDayForecast: SingleDayForecast): Weather => {
  * @return { string } String representation of the direction.
  */
 const getWindDirection = (degrees: number): string => {
-  if (degrees === 0 || degrees === 360) {
-    return "N";
-  } else if (degrees > 0 && degrees < 90) {
-    return "NE";
-  } else if (degrees === 90) {
-    return "E";
-  } else if (degrees > 90 && degrees < 180) {
-    return "SE";
-  } else if (degrees === 180) {
-    return "S";
-  } else if (degrees > 180 && degrees < 270) {
-    return "SW";
-  } else if (degrees === 270) {
-    return "W";
-  } else if (degrees > 270 && degrees < 360) {
-    return "NW";
-  } else {
-    return "n/a";
+  switch (true) {
+    case degrees === 0 || degrees === 360:
+      return "N";
+    case degrees > 0 && degrees < 90:
+      return "NE";
+    case degrees === 90:
+      return "E";
+    case degrees > 90 && degrees < 180:
+      return "SE";
+    case degrees === 180:
+      return "S";
+    case degrees > 180 && degrees < 270:
+      return "SW";
+    case degrees === 270:
+      return "W";
+    case degrees > 270 && degrees < 360:
+      return "NW";
   }
+  return "n/a";
 };
 
 /**
