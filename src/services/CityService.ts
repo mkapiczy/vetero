@@ -19,15 +19,14 @@ const getCities = (): Promise<ReadonlyArray<City>> => {
   return http
     .get("./city.list.json")
     .then(res => {
-      if (res && res.data) {
-        return Object.freeze(
-          _.map(_.filter(res.data, c => !_.isEmpty(c.name)), c => {
-            delete c.coord;
-            return c;
-          })
-        );
-      }
-      return [];
+      return res && res.data
+        ? Object.freeze(
+            _.map(_.filter(res.data, c => !_.isEmpty(c.name)), c => {
+              delete c.coord;
+              return c;
+            })
+          )
+        : [];
     })
     .catch(err => {
       console.error("Error in getCities", err);
