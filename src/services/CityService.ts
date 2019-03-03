@@ -1,5 +1,6 @@
 import http from "axios";
-import _ from "lodash";
+
+const CITY_AUTOCOMPLETE_URL = process.env.VUE_APP_CITY_AUTOCOMPLTE_URL;
 
 export class City {
   id?: number;
@@ -8,28 +9,18 @@ export class City {
 }
 
 /**
- * Reads a list of cities in the world
+ * Reads a list of cities in the world by name.
  * @function
  * @memberof CityService
  *
- * @return { Promise<ReadonlyArray<City>> } Readonly array of cities.
- * Readonly to tell vue that it does not need to observe the value reactively (rendering improvement for big arrays)
+ * @return { Promise<Array<City>> } Array of cities.
  */
-const getCities = (): Promise<ReadonlyArray<City>> => {
+const getCityAutocomplete = (searchString: string): Promise<Array<City>> => {
   return http
-    .get("./city.list.json")
-    .then(res => {
-      return res && res.data
-        ? Object.freeze(
-            _.map(_.filter(res.data, c => !_.isEmpty(c.name)), c => {
-              delete c.coord;
-              return c;
-            })
-          )
-        : [];
-    })
+    .get(`${CITY_AUTOCOMPLETE_URL}?searchString=${searchString}`)
+    .then(cities => cities.data.cities)
     .catch(err => {
-      console.error("Error in getCities", err);
+      console.error(err);
       return [];
     });
 };
@@ -41,5 +32,5 @@ const getCities = (): Promise<ReadonlyArray<City>> => {
  * @version 1.0.0
  */
 export default {
-  getCities
+  getCityAutocomplete
 };

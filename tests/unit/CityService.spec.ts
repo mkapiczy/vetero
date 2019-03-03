@@ -33,7 +33,7 @@ describe("CityService", () => {
       delete c.coord;
       return c;
     });
-    return CityService.getCities().then(cities => {
+    return CityService.getCityAutocomplete("").then((cities: Array<City>) => {
       expect(getStub).toBeCalledTimes(1);
       expect(cities.length).toEqual(2);
       expect(cities).toEqual(expectedCitiesResult);
@@ -45,7 +45,7 @@ describe("CityService", () => {
       .spyOn(http, "get")
       .mockImplementation(url => fakePromise(res));
 
-    return CityService.getCities().then(cities => {
+    return CityService.getCityAutocomplete("").then((cities: Array<City>) => {
       expect(getStub).toBeCalledTimes(1);
       expect(cities).toEqual([]);
     });

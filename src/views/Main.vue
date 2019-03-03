@@ -1,10 +1,6 @@
 <template>
   <div id="main" class="ui flex container">
-    <CitySelector
-      :cities="cities"
-      @citySelected="onCitySelected"
-      :isLoading="isCityLoading"
-    />
+    <CitySelector @citySelected="onCitySelected" />
     <CurrentWeather
       :weather="currentWeather"
       :isLoading="isWeatherLoading"
@@ -31,14 +27,12 @@
 </style>
 
 <script lang="ts">
-import _ from "lodash";
 import { Component, Vue } from "vue-property-decorator";
 import CurrentWeather from "@/components/CurrentWeather.vue";
 import Forecast from "@/components/Forecast/Forecast.vue";
 import DayMenu from "@/components/DayMenu.vue";
 import CitySelector from "@/components/CitySelector.vue";
 import WeatherService from "../services/WeatherService";
-import CityService from "../services/CityService";
 import {
   SingleDayForecast,
   Weather,
@@ -60,8 +54,6 @@ export default class Main extends Vue {
   forecastsByDay: undefined | Array<SingleDayForecast> = [];
   forecastForSelectedDay: SingleDayForecast = {};
   isWeatherLoading: boolean = false;
-  isCityLoading: boolean = false;
-  cities: ReadonlyArray<City> = [];
   // TODO -  Hardcoded for now - default user location to be determined using location from the browser or initialy show page without a forecast
   selectedCity: City = {
     id: 7531926,
@@ -99,26 +91,9 @@ export default class Main extends Vue {
       });
   }
 
-  getCities(): Promise<ReadonlyArray<City>> {
-    this.isCityLoading = true;
-    return CityService.getCities()
-      .then(cities => {
-        this.cities = cities;
-        this.selectedCity =
-          _.find(this.cities, c => c.id === this.selectedCity.id) || {};
-        this.isCityLoading = false;
-        return cities;
-      })
-      .catch(() => {
-        this.isCityLoading = false;
-        return [];
-      });
-  }
-
   created() {
     if (this.selectedCity && this.selectedCity.id)
       this.getWeatherForecast(this.selectedCity.id);
-    this.getCities();
   }
 }
 </script>

@@ -8,6 +8,7 @@
         class="search"
         type="text"
         autocomplete="off"
+        @input="debouncedGetAutocomplete"
         :placeholder="isLoading ? $t('LOADING_DATA') : $t('SELECT_CITY')"
         v-model.trim="citySearchTerm"
       />
@@ -39,17 +40,21 @@
 </style>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import fuzzy from "fuzzy";
 import { City } from "../services/CityService";
-
+import _ from "lodash";
+import CityService from "../services/CityService";
 @Component
 export default class CitySelector extends Vue {
-  @Prop() private cities!: Array<City>;
-  @Prop() private isLoading!: boolean;
-
+  isLoading: boolean = false;
   citySearchTerm: any = "";
   maxItems: number = 10;
+  debouncedGetAutocomplete: Function = _.debounce(
+    this.getCityAutocomplete,
+    500
+  );
+  autocompleteCities: Array<City> = [];
 
   get filteredCities() {
     const fuzzyFilterOptions = {
@@ -58,7 +63,11 @@ export default class CitySelector extends Vue {
 
     return Object.freeze(
       fuzzy
-        .filter(this.citySearchTerm, this.cities, fuzzyFilterOptions)
+        .filter(
+          this.citySearchTerm,
+          this.autocompleteCities,
+          fuzzyFilterOptions
+        )
         .slice(0, this.maxItems)
         .map((item: any) => item.original)
     );
@@ -66,6 +75,14 @@ export default class CitySelector extends Vue {
 
   selectCity(city: City) {
     this.$emit("citySelected", city);
+  }
+
+  getCityAutocomplete() {
+    this.isLoading = true;
+    CityService.getCityAutocomplete(this.citySearchTerm).then(cities => {
+      this.autocompleteCities = cities;
+      this.isLoading = false;
+    });
   }
 }
 </script>
