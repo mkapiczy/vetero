@@ -1,6 +1,6 @@
 import http from "axios";
 
-const CITY_AUTOCOMPLETE_URL = process.env.VUE_APP_CITY_AUTOCOMPLTE_URL;
+const CITY_AUTOCOMPLETE_URL = process.env.VUE_APP_CITY_AUTOCOMPLETE_URL;
 
 export class City {
   id?: number;

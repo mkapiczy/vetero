@@ -14,6 +14,11 @@ yarn install
 yarn run serve
 ```
 
+In case of node-sass error run
+```
+npm rebuild node-sass --force
+```
+
 ### Compiles and minifies for production
 ```
 yarn run build
@@ -71,10 +76,11 @@ The main view of the application consists of 4 child components representing 4 s
         
 The application was designed to be responsive.
 
+The CitySelector autocomplete mechanism was implemented with a 500ms debounced request to the Node.JS server filtering the city list.
+
 ### Tradeoffs
 
 - Styling - not much focus was put on the styling and theming. Although the application was designed to be responsive and user friendly more styling adjustments could be made,
-- CitySelector - the list of cities with available weather is currently retrieved from the json file, which is time and memory consuming (the file size is almost 30Mb). This should be managed in a different way, probably best to delegate debounced requests to the server and let the server do the filtering.
 - Default city - for now it is (very ugly) hardcoded to Warsaw. It should be determined based on browser's navigator API (e.g. using vue-browser-geolocation module) or IP lookup.
 - Metrics - The application supports only Celcius metric, while Kelvin, and Fahrenheit metrics are also supported by the OpenWeatherAPI,
 - Usage of OpenWeatherMap default weather icons - A set of custom icons should be used.
